@@ -1,6 +1,8 @@
 package com.example.medicineservice.Controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,18 +17,26 @@ import com.example.medicineservice.Models.Medicine;
 import com.example.medicineservice.repository.MedicineRepository;
 
 @RestController
-@RequestMapping("/feedback")
+@RequestMapping("/medicine")
 public class MedicineController {
 
     @Autowired
-    MedicineRepository feedbackRepository;
+    MedicineRepository medicineRepository;
     
       @GetMapping("")
-    public ResponseEntity getFeedbacks(){
-        List<Medicine> feedbacks= this.feedbackRepository.findAll(); 
-        return new ResponseEntity(feedbacks, HttpStatus.OK);
+    public ResponseEntity getMedicines(){
+        List<Medicine> medicines= this.medicineRepository.findAll(); 
+        return new ResponseEntity(medicines, HttpStatus.OK);
     }
 
-
+  @PostMapping("/add")
+    public ResponseEntity createPost(@RequestBody Map<String,String> body){
+        Medicine medicine=new Medicine();
+        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%###########################################" +body);
+        medicine.setName(body.get("name"));
+        System.out.println(body);
+        this.medicineRepository.save(medicine);
+        return new ResponseEntity(medicine, HttpStatus.CREATED);
+    }
 
 }
